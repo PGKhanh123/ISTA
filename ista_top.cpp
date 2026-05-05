@@ -27,9 +27,8 @@ void ista_top(
     #pragma HLS ARRAY_PARTITION variable=local_x_hat cyclic factor=8 dim=1
     #pragma HLS ARRAY_PARTITION variable=g cyclic factor=8 dim=1
 
-    // -----------------------------------------------------------------
+
     // Step 1: Copy data from external memory to local buffers
-    // -----------------------------------------------------------------
     copy_y: for (int i = 0; i < M; i++) {
         #pragma HLS PIPELINE II=1
         local_y[i] = y[i];
@@ -47,9 +46,8 @@ void ista_top(
         local_x_hat[j] = 0;
     }
 
-    // -----------------------------------------------------------------
+
     // Step 2: Main loop for ISTA algorithm
-    // -----------------------------------------------------------------
     main_loop: for (int iter = 0; iter < MAX_ITER; iter++) {
         
     	// Step 2.1: Calculate residual r = y - A * x_hat
@@ -120,9 +118,8 @@ void ista_top(
         }
     }
 
-    // -----------------------------------------------------------------
+
     // Step 3: Copy final results from local buffers to output memory
-    // -----------------------------------------------------------------
     out_loop: for (int j = 0; j < N; j++) {
         #pragma HLS PIPELINE II=1
         x_hat[j] = local_x_hat[j];
